@@ -1,0 +1,27 @@
+<div class="file-list">
+  <h2>Archivos</h2>
+  <div *ngIf="loading" class="loading">Cargando archivos...</div>
+  <table *ngIf="!loading && files.length > 0">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Tamaño</th>
+        <th>Última modificación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let file of files">
+        <td>{{ file.name }}</td>
+        <td>{{ formatBytes(file.size) }}</td>
+        <td>{{ file.lastModified | date:'medium' }}</td>
+        <td>
+          <button (click)="downloadFile(file.name)">Descargar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="!loading && files.length === 0" class="no-files">
+    No hay archivos disponibles.
+  </div>
+</div>
