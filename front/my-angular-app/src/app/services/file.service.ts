@@ -10,7 +10,7 @@ export class FileService {
   private apiUrl = 'http://localhost:3000';
   // private fileUploadedSource = new Subject<void>();
   private fileChangedSource = new Subject<void>();
-  
+
   // fileUploaded$ = this.fileUploadedSource.asObservable();
   fileChanged$ = this.fileChangedSource.asObservable();
 
@@ -36,6 +36,13 @@ export class FileService {
 
   deleteFile(filename: string): Observable<any> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/delete/${filename}`)
+      .pipe(
+        tap(() => this.fileChangedSource.next())
+      );
+  }
+
+  deleteMultipleFiles(filenames: string[]): Observable<any> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/delete-multiple`, { filenames })
       .pipe(
         tap(() => this.fileChangedSource.next())
       );

@@ -87,3 +87,21 @@ tr:nth-child(even) {
 .delete-btn:hover {
   background-color: #d32f2f;
 }
+
+.delete-multiple-btn {
+  background-color: #f44336;
+  margin-bottom: 10px;
+}
+
+.delete-multiple-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.delete-multiple-btn:hover:not(:disabled) {
+  background-color: #d32f2f;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+}

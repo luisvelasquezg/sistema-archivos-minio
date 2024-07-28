@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 export class FileListComponent implements OnInit, OnDestroy {
   files: any[] = [];
   loading: boolean = false;
+  selectedFiles: Set<string> = new Set();
   // private fileUploadSubscription: Subscription = new Subscription();
   private fileChangedSubscription: Subscription = new Subscription();
 
@@ -94,5 +95,37 @@ export class FileListComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
+
+  toggleFileSelection(filename: string): void {
+    if (this.selectedFiles.has(filename)) {
+      this.selectedFiles.delete(filename);
+    } else {
+      this.selectedFiles.add(filename);
+    }
+  }
+
+  deleteSelectedFiles(): void {
+    if (this.selectedFiles.size === 0) {
+      alert('Por favor, selecciona al menos un archivo para eliminar.');
+      return;
+    }
+
+    const filesToDelete = Array.from(this.selectedFiles);
+    if (confirm(`¿Estás seguro de que quieres eliminar ${filesToDelete.length} archivo(s)?`)) {
+      this.fileService.deleteMultipleFiles(filesToDelete).subscribe({
+        next: (response) => {
+          console.log('Archivos eliminados con éxito:', response.message);
+          this.selectedFiles.clear();
+          this.loadFiles();
+        },
+        error: (error) => {
+          console.error('Error al eliminar los archivos:', error);
+        },
+        complete: () => {
+          console.log('Eliminación completada');
+        }
+      });
+    }
+  }
+
 }

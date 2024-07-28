@@ -108,6 +108,23 @@ app.delete('/delete/:filename', async (req, res) => {
   }
 });
 
+app.post('/delete-multiple', async (req, res) => {
+  const bucketName = myBucketName;
+  const filenames = req.body.filenames;
+
+  if (!Array.isArray(filenames) || filenames.length === 0) {
+    return res.status(400).json({ message: 'Se requiere un array de nombres de archivo' });
+  }
+
+  try {
+    await Promise.all(filenames.map(filename => minioClient.removeObject(bucketName, filename)));
+    res.status(200).json({ message: 'Archivos eliminados con éxito' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error al eliminar los archivos' });
+  }
+});
+
 // ==============================
 
 connectDB();
