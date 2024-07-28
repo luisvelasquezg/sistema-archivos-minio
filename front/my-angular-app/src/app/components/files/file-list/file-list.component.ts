@@ -12,7 +12,8 @@ export class FileListComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   selectedFiles: Set<string> = new Set();
   allSelected: boolean = false;
-  
+  selectedFileForViewing: string | null = null;
+
   private fileChangedSubscription: Subscription = new Subscription();
 
   constructor(private fileService: FileService) { }
@@ -145,6 +146,10 @@ export class FileListComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  viewFile(filename: string): void {
+    this.selectedFileForViewing = filename;
   }
 
 }

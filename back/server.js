@@ -8,6 +8,10 @@ const fs = require('fs');
 const connectDB = require('./config/mongoose');
 const apiRoutes = require('./config/main.routes');
 
+// Previsualization
+const mime = require('mime-types');
+// (fin previsualization)
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -126,6 +130,28 @@ app.post('/delete-multiple', async (req, res) => {
 });
 
 // ==============================
+
+
+// Previsualization
+app.get('/view/:filename', async (req, res) => {
+  const bucketName = myBucketName;
+  const objectName = req.params.filename;
+
+  try {
+    const dataStream = await minioClient.getObject(bucketName, objectName);
+    const stat = await minioClient.statObject(bucketName, objectName);
+    const contentType = mime.lookup(objectName) || 'application/octet-stream';
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Length', stat.size);
+
+    dataStream.pipe(res);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error al obtener el archivo' });
+  }
+});
+// (Fin de Previsualization)
 
 connectDB();
 apiRoutes(app);

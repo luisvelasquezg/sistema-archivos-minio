@@ -7,12 +7,14 @@ import { AppComponent } from './app.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FileListComponent } from './components/files/file-list/file-list.component';
 import { FileUploadComponent } from './components/files/file-upload/file-upload.component';
+import { FileViewerComponent } from './components/files/file-viewer/file-viewer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FileUploadComponent,
-    FileListComponent
+    FileListComponent,
+    FileViewerComponent
   ],
   imports: [
     BrowserModule,

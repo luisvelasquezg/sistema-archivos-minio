@@ -48,4 +48,23 @@ export class FileService {
       );
   }
 
+
+  // Previsualization of files
+  getFileUrl(filename: string): string {
+    return `${this.apiUrl}/view/${filename}`;
+  }
+
+  getFileType(filename: string): string {
+    const extension = filename.split('.').pop()?.toLowerCase();
+    if (extension && ['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+      return 'image';
+    } else if (extension === 'pdf') {
+      return 'pdf';
+    } else if (extension && ['txt', 'csv', 'json'].includes(extension)) {
+      return 'text';
+    }
+    return 'other';
+  }
+  // End of previsualization of files
+
 }
