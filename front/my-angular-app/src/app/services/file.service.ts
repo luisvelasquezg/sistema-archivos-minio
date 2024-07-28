@@ -8,9 +8,11 @@ import { tap } from 'rxjs/operators';
 })
 export class FileService {
   private apiUrl = 'http://localhost:3000';
-  private fileUploadedSource = new Subject<void>();
-
-  fileUploaded$ = this.fileUploadedSource.asObservable();
+  // private fileUploadedSource = new Subject<void>();
+  private fileChangedSource = new Subject<void>();
+  
+  // fileUploaded$ = this.fileUploadedSource.asObservable();
+  fileChanged$ = this.fileChangedSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -19,7 +21,8 @@ export class FileService {
     formData.append('file', file, file.name);
     return this.http.post<{ message: string }>(`${this.apiUrl}/upload`, formData)
       .pipe(
-        tap(() => this.fileUploadedSource.next())
+        // tap(() => this.fileUploadedSource.next())
+        tap(() => this.fileChangedSource.next())
       );
   }
 
@@ -30,4 +33,12 @@ export class FileService {
   downloadFile(filename: string): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/download/${filename}`, { responseType: 'blob' });
   }
+
+  deleteFile(filename: string): Observable<any> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/delete/${filename}`)
+      .pipe(
+        tap(() => this.fileChangedSource.next())
+      );
+  }
+
 }

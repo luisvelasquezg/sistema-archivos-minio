@@ -95,6 +95,19 @@ app.get('/download/:filename', async (req, res) => {
   }
 });
 
+app.delete('/delete/:filename', async (req, res) => {
+  const bucketName = myBucketName;
+  const objectName = req.params.filename;
+
+  try {
+    await minioClient.removeObject(bucketName, objectName);
+    res.status(200).json({ message: 'Archivo eliminado con éxito' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error al eliminar el archivo' });
+  }
+});
+
 // ==============================
 
 connectDB();

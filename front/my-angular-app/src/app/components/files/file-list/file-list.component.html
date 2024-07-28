@@ -17,6 +17,7 @@
         <td>{{ file.lastModified | date:'medium' }}</td>
         <td>
           <button (click)="downloadFile(file.name)">Descargar</button>
+          <button (click)="deleteFile(file.name)" class="delete-btn">Eliminar</button>
         </td>
       </tr>
     </tbody>

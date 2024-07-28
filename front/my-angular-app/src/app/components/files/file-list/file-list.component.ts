@@ -10,22 +10,29 @@ import { Subscription } from 'rxjs';
 export class FileListComponent implements OnInit, OnDestroy {
   files: any[] = [];
   loading: boolean = false;
-  private fileUploadSubscription: Subscription = new Subscription();
+  // private fileUploadSubscription: Subscription = new Subscription();
+  private fileChangedSubscription: Subscription = new Subscription();
 
   constructor(private fileService: FileService) { }
 
   ngOnInit(): void {
     this.loadFiles();
-    this.fileUploadSubscription = this.fileService.fileUploaded$.subscribe(() => {
+    // this.fileUploadSubscription = this.fileService.fileUploaded$.subscribe(() => {
+    this.fileChangedSubscription = this.fileService.fileChanged$.subscribe(() => {
       this.loadFiles();
     });
   }
 
   ngOnDestroy(): void {
-    if (this.fileUploadSubscription) {
-      this.fileUploadSubscription.unsubscribe();
+    if (this.fileChangedSubscription) {
+      this.fileChangedSubscription.unsubscribe();
     }
   }
+  // ngOnDestroy(): void {
+  //   if (this.fileUploadSubscription) {
+  //     this.fileUploadSubscription.unsubscribe();
+  //   }
+  // }
 
   loadFiles(): void {
     this.loading = true;
@@ -71,4 +78,21 @@ export class FileListComponent implements OnInit, OnDestroy {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
+  deleteFile(filename: string): void {
+    if (confirm(`¿Estás seguro de que quieres eliminar el archivo "${filename}"?`)) {
+      this.fileService.deleteFile(filename).subscribe({
+        next: (response) => {
+          console.log('Archivo eliminado con éxito:', response.message);
+          this.loadFiles();
+        },
+        error: (error) => {
+          console.error('Error al eliminar el archivo:', error);
+        },
+        complete: () => {
+          console.log('Eliminación completada');
+        }
+      });
+    }
+  }
+  
 }
