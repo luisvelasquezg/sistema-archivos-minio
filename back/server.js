@@ -145,6 +145,11 @@ app.get('/view/:filename', async (req, res) => {
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Length', stat.size);
 
+    // Para archivos de video y audio, configuramos el streaming
+    if (contentType.startsWith('video/') || contentType.startsWith('audio/')) {
+      res.setHeader('Accept-Ranges', 'bytes');
+    }
+
     dataStream.pipe(res);
   } catch (err) {
     console.error(err);

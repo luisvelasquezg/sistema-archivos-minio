@@ -62,6 +62,10 @@ export class FileService {
       return 'pdf';
     } else if (extension && ['txt', 'csv', 'json'].includes(extension)) {
       return 'text';
+    } else if (extension && ['mp4', 'webm', 'ogg'].includes(extension)) {
+      return 'video';
+    } else if (extension && ['mp3', 'wav'].includes(extension)) {
+      return 'audio';
     }
     return 'other';
   }
