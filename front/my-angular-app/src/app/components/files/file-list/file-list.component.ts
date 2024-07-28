@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FileService } from '../../../services/file.service';
 import { Subscription } from 'rxjs';
 
@@ -7,14 +7,24 @@ import { Subscription } from 'rxjs';
   templateUrl: './file-list.component.html',
   styleUrls: ['./file-list.component.css']
 })
-export class FileListComponent implements OnInit {
+export class FileListComponent implements OnInit, OnDestroy {
   files: any[] = [];
   loading: boolean = false;
+  private fileUploadSubscription: Subscription = new Subscription();
 
   constructor(private fileService: FileService) { }
 
   ngOnInit(): void {
     this.loadFiles();
+    this.fileUploadSubscription = this.fileService.fileUploaded$.subscribe(() => {
+      this.loadFiles();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.fileUploadSubscription) {
+      this.fileUploadSubscription.unsubscribe();
+    }
   }
 
   loadFiles(): void {

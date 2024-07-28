@@ -7,7 +7,7 @@ import { FileService } from '../../../services/file.service';
   styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent {
-  @Output() fileUploaded = new EventEmitter<void>();
+  // @Output() fileUploaded = new EventEmitter<void>();
 
   selectedFile: File | null = null;
   uploading: boolean = false;
@@ -23,10 +23,10 @@ export class FileUploadComponent {
       this.uploading = true;
       this.fileService.uploadFile(this.selectedFile).subscribe({
         next: (response) => {
-          console.log('Archivo subido con éxito:', response);
+          console.log('Archivo subido con éxito:', response.message);
           this.uploading = false;
           this.selectedFile = null;
-          this.fileUploaded.emit();
+          // this.fileUploaded.emit();
           // Aquí puedes agregar lógica adicional, como actualizar la lista de archivos
         },
         error: (error) => {

@@ -1,6 +1,13 @@
-<div class="container">
+<!-- <div class="container">
   <h1>{{ title }}</h1>
   <app-file-upload (fileUploaded)="onFileUploaded()"></app-file-upload>
   <app-file-list></app-file-list>
+</div> -->
+
+<div class="container">
+  <h1>{{ title }}</h1>
+  <app-file-upload></app-file-upload>
+  <app-file-list></app-file-list>
 </div>
+
 <router-outlet />

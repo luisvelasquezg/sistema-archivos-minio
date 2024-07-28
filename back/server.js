@@ -45,10 +45,12 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
   try {
     await minioClient.putObject(bucketName, objectName, fileBuffer);
-    res.status(200).send('Archivo subido con éxito');
+    // res.status(200).send('Archivo subido con éxito'); // Respuesta de texto plano
+    res.status(200).json({ message: 'Archivo subido con éxito' }); // Respuesta de formato JSON
   } catch (err) {
     console.error(err);
-    res.status(500).send('Error al subir el archivo');
+    // res.status(500).send('Error al subir el archivo'); // Respuesta de texto plano
+    res.status(500).json({ message: 'Error al subir el archivo' }); // Respuesta de formato JSON
   }
 });
 
@@ -68,7 +70,8 @@ app.get('/files', async (req, res) => {
 
   stream.on('error', (err) => {
     console.error(err);
-    res.status(500).send('Error al listar los archivos');
+    // res.status(500).send('Error al listar los archivos');
+    res.status(500).json({ message: 'Error al listar los archivos' });
   });
 
   stream.on('end', () => {
@@ -87,7 +90,8 @@ app.get('/download/:filename', async (req, res) => {
     fileStream.pipe(res);
   } catch (err) {
     console.error(err);
-    res.status(500).send('Error al descargar el archivo');
+    // res.status(500).send('Error al descargar el archivo');
+    res.status(500).json({ message: 'Error al descargar el archivo' });
   }
 });
 
