@@ -11,7 +11,8 @@ export class FileListComponent implements OnInit, OnDestroy {
   files: any[] = [];
   loading: boolean = false;
   selectedFiles: Set<string> = new Set();
-  // private fileUploadSubscription: Subscription = new Subscription();
+  allSelected: boolean = false;
+  
   private fileChangedSubscription: Subscription = new Subscription();
 
   constructor(private fileService: FileService) { }
@@ -34,6 +35,32 @@ export class FileListComponent implements OnInit, OnDestroy {
   //     this.fileUploadSubscription.unsubscribe();
   //   }
   // }
+
+  toggleAllSelection(): void {
+    if (this.allSelected) {
+      this.selectedFiles.clear();
+    } else {
+      this.files.forEach(file => this.selectedFiles.add(file.name));
+    }
+    this.allSelected = !this.allSelected;
+  }
+
+  isAllSelected(): boolean {
+    return this.selectedFiles.size === this.files.length;
+  }
+
+  updateAllSelected(): void {
+    this.allSelected = this.isAllSelected();
+  }
+
+  toggleFileSelection(filename: string): void {
+    if (this.selectedFiles.has(filename)) {
+      this.selectedFiles.delete(filename);
+    } else {
+      this.selectedFiles.add(filename);
+    }
+    this.updateAllSelected();
+  }
 
   loadFiles(): void {
     this.loading = true;
@@ -93,14 +120,6 @@ export class FileListComponent implements OnInit, OnDestroy {
           console.log('Eliminación completada');
         }
       });
-    }
-  }
-
-  toggleFileSelection(filename: string): void {
-    if (this.selectedFiles.has(filename)) {
-      this.selectedFiles.delete(filename);
-    } else {
-      this.selectedFiles.add(filename);
     }
   }
 
