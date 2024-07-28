@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FileService } from '../../../services/file.service';
+import { FileService } from '../services/file.service';
 import { Subscription } from 'rxjs';
 
 @Component({
