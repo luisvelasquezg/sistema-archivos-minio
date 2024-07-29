@@ -91,7 +91,6 @@ app.get('/download/:filename', async (req, res) => {
 
   try {
     const fileStream = await minioClient.getObject(bucketName, objectName);
-    // const fileStream = await minioClient.getPartialObject(bucketName, objectName);
     res.setHeader('Content-Disposition', `attachment; filename="${objectName}"`);
     fileStream.pipe(res);
   } catch (err) {
