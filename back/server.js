@@ -38,6 +38,14 @@ const myBucketName = 'sistema-archivos-example';
 // Configurar multer para manejar la carga de archivos
 const upload = multer({ storage: multer.memoryStorage() });
 
+// // Configurar multer para establecer límite de tamaño de archivos que se suben al sistema de archivos
+// const upload = multer({
+//   dest: 'uploads/',
+//   limits: {
+//     fileSize: 1024 * 1024 * 100 // 100 MB limit
+//   }
+// });
+
 // Ruta para subir archivos
 app.post('/upload', upload.single('file'), async (req, res) => {
   if (!req.file) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -19,11 +19,21 @@ export class FileService {
   uploadFile(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file, file.name);
-    return this.http.post<{ message: string }>(`${this.apiUrl}/upload`, formData)
-      .pipe(
-        // tap(() => this.fileUploadedSource.next())
+
+    const req = new HttpRequest('POST', `${this.apiUrl}/upload`, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req).pipe(
         tap(() => this.fileChangedSource.next())
       );
+
+    // return this.http.post<{ message: string }>(`${this.apiUrl}/upload`, formData)
+    //   .pipe(
+    //     // tap(() => this.fileUploadedSource.next())
+    //     tap(() => this.fileChangedSource.next())
+    //   );
   }
 
   getFiles(): Observable<any[]> {
