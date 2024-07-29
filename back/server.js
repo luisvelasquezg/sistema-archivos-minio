@@ -10,6 +10,7 @@ const apiRoutes = require('./config/main.routes');
 
 // Previsualization
 const mime = require('mime-types');
+const rangeParser = require('range-parser'); // Para streaming de video y audio 
 // (fin previsualization)
 
 const app = express();
@@ -132,31 +133,75 @@ app.post('/delete-multiple', async (req, res) => {
 // ==============================
 
 
-// Previsualization
+// ### Previsualization ###
+
 app.get('/view/:filename', async (req, res) => {
   const bucketName = myBucketName;
   const objectName = req.params.filename;
 
   try {
-    const dataStream = await minioClient.getObject(bucketName, objectName);
     const stat = await minioClient.statObject(bucketName, objectName);
     const contentType = mime.lookup(objectName) || 'application/octet-stream';
+    const fileSize = stat.size;
 
+    // Configurar headers para streaming
     res.setHeader('Content-Type', contentType);
-    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Accept-Ranges', 'bytes');
 
-    // Para archivos de video y audio, configuramos el streaming
-    if (contentType.startsWith('video/') || contentType.startsWith('audio/')) {
-      res.setHeader('Accept-Ranges', 'bytes');
+    // Manejar solicitudes de rango
+    const range = req.headers.range;
+    if (range) {
+      const parts = rangeParser(fileSize, range);
+
+      if (parts && parts.type === 'bytes' && parts.length === 1) {
+        const [{ start, end }] = parts;
+        const chunksize = (end - start) + 1;
+        res.setHeader('Content-Range', `bytes ${start}-${end}/${fileSize}`);
+        res.setHeader('Content-Length', chunksize);
+        res.status(206); // Partial Content
+
+        const stream = await minioClient.getPartialObject(bucketName, objectName, start, end - start + 1);
+        stream.pipe(res);
+      } else {
+        res.status(416).send('Range Not Satisfiable');
+      }
+    } else {
+      res.setHeader('Content-Length', fileSize);
+      const stream = await minioClient.getObject(bucketName, objectName);
+      stream.pipe(res);
     }
-
-    dataStream.pipe(res);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error al obtener el archivo' });
   }
 });
-// (Fin de Previsualization)
+
+// app.get('/view/:filename', async (req, res) => {
+//   const bucketName = myBucketName;
+//   const objectName = req.params.filename;
+
+//   try {
+//     const dataStream = await minioClient.getObject(bucketName, objectName);
+//     const stat = await minioClient.statObject(bucketName, objectName);
+//     const contentType = mime.lookup(objectName) || 'application/octet-stream';
+
+//     res.setHeader('Content-Type', contentType);
+//     res.setHeader('Content-Length', stat.size);
+
+//     // Para archivos de video y audio, configuramos el streaming
+//     if (contentType.startsWith('video/') || contentType.startsWith('audio/')) {
+//       res.setHeader('Accept-Ranges', 'bytes');
+//     }
+
+//     dataStream.pipe(res);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Error al obtener el archivo' });
+//   }
+// });
+
+
+// ###(Fin de Previsualization)###
 
 connectDB();
 apiRoutes(app);
