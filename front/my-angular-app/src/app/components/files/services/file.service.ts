@@ -34,6 +34,11 @@ export class FileService {
     return this.http.get(`${this.apiUrl}/download/${filename}`, { responseType: 'blob' });
   }
 
+  // downloadFile(filename: string): void {
+  //   const url = `${this.apiUrl}/download/${filename}`;
+  //   window.open(url, '_blank');
+  // }
+
   deleteFile(filename: string): Observable<any> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/delete/${filename}`)
       .pipe(

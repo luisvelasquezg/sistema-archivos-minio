@@ -91,6 +91,7 @@ app.get('/download/:filename', async (req, res) => {
 
   try {
     const fileStream = await minioClient.getObject(bucketName, objectName);
+    // const fileStream = await minioClient.getPartialObject(bucketName, objectName);
     res.setHeader('Content-Disposition', `attachment; filename="${objectName}"`);
     fileStream.pipe(res);
   } catch (err) {
@@ -103,14 +104,35 @@ app.get('/download/:filename', async (req, res) => {
 app.delete('/delete/:filename', async (req, res) => {
   const bucketName = myBucketName;
   const objectName = req.params.filename;
+  const maxRetries = 3;
+  let attempt = 0;
 
-  try {
-    await minioClient.removeObject(bucketName, objectName);
-    res.status(200).json({ message: 'Archivo eliminado con éxito' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error al eliminar el archivo' });
+  async function deleteObject() {
+    attempt++;
+    try {
+      await minioClient.removeObject(bucketName, objectName);
+      return res.status(200).json({ message: 'Archivo eliminado con éxito' });
+    } catch (err) {
+      if (attempt <= maxRetries) {
+        console.error(`Attempt ${attempt} failed: ${err.message}. Retrying...`);
+        setTimeout(deleteObject, Math.pow(2, attempt) * 1000); // Backoff exponencial
+      } else {
+        console.error('Max retries reached:', err);
+        return res.status(500).json({ message: 'Error al eliminar el archivo' });
+      }
+    }
   }
+
+  deleteObject();
+
+  // try {
+  //   await minioClient.removeObject(bucketName, objectName);
+  //   res.status(200).json({ message: 'Archivo eliminado con éxito' });
+  // } catch (err) {
+  //   console.error(err);
+  //   res.status(500).json({ message: 'Error al eliminar el archivo' });
+  // }
+
 });
 
 app.post('/delete-multiple', async (req, res) => {
