@@ -1,15 +1,43 @@
 <!-- <ng-include src="'navbar/views/navbar.view.html'" /></ng-include> -->
-
 <!-- <section data-ng-controller="ArchivosController"> -->
-<section data-ng-controller="ArchivosController">
-  <label>ARCHIVOS</label>
-  <label>Lista de Archivos</label>
 
-  <!-- <div ng-controller="MainController"> -->
-    <h1>API Consumer</h1>
-    <ul>
-      <li ng-repeat="archivo in archivos">{{ archivo.nombre }}</li>
-    </ul>
-  <!-- </div> -->
+<section data-ng-controller="ArchivosController">
+  <br>
+  <a href="#!/archivos/create">Crear Archivo</a>
+  <h2>ARCHIVOS</h2>
+  <h3>Lista de Archivos</h3>
+
+  <!-- <style>
+    table {
+      border-collapse: collapse;
+      width: 60%;
+    }
+    th, td {
+      border: 1px solid black;
+    }
+  </style> -->
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Ubicación</th>
+        <th>Fecha de Creación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="archivo in archivos">
+        <td>{{ archivo.nombre }}</td>
+        <td>{{ archivo.descripcion }}</td>
+        <td>{{ archivo.ubicacion }}</td>
+        <td>{{ archivo.fechaCreacion }}</td>
+      </tr>
+    </tbody>
+  </table>
+<!-- 
+  <ul>
+    <li ng-repeat="archivo in archivos">{{ archivo.nombre }}</li>
+  </ul> -->
 
 </section>

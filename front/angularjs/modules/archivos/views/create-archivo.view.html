@@ -1,20 +1,21 @@
 <!-- <ng-include src="'navbar/views/navbar.view.html'" /></ng-include> -->
 
 <section data-ng-controller="ArchivosController">
-  <label>ARCHIVOS</label>
-  <label>Crear Archivo</label>
+  <br>
+  <a href="#!/archivos">Lista de Archivos</a>
+  <br>
+  <h2>ARCHIVOS</h2>
+  <h3>Crear Archivo</h3>
 
-
-  <h1>{{ product.id ? 'Edit Product' : 'New Product' }}</h1>
-  <form ng-submit="saveProduct()">
+  <form ng-submit="create()">
     <label>Nombre</label>
+    <input type="text" ng-model="archivo.nombre" required>
     <label>Descripcion</label>
+    <input type="text" ng-model="archivo.descripcion" required>
     <label>Ubicacion</label>
-    <input type="text" ng-model="product.name" required>
-    <label>Price:</label>
-    <input type="number" ng-model="product.price" required>
+    <input type="text" ng-model="archivo.ubicacion" required>
     <button type="submit">Save</button>
-    <a href="#!/products">Cancel</a>
+    <a href="#!/archivos">Cancel</a>
   </form>
 
 </section>
