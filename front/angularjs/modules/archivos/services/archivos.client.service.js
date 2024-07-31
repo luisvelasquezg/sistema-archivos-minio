@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('archivos').service('Archivos', [
   '$resource',
   function ($resource) {

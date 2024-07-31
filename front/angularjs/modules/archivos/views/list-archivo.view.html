@@ -1,6 +1,15 @@
 <!-- <ng-include src="'navbar/views/navbar.view.html'" /></ng-include> -->
 
+<!-- <section data-ng-controller="ArchivosController"> -->
 <section data-ng-controller="ArchivosController">
   <label>ARCHIVOS</label>
   <label>Lista de Archivos</label>
+
+  <!-- <div ng-controller="MainController"> -->
+    <h1>API Consumer</h1>
+    <ul>
+      <li ng-repeat="archivo in archivos">{{ archivo.nombre }}</li>
+    </ul>
+  <!-- </div> -->
+
 </section>

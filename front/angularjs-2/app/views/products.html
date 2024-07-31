@@ -1,0 +1,9 @@
+<h1>Products</h1>
+<a href="#!/products/new">Add New Product</a>
+<ul>
+  <li ng-repeat="product in products">
+    {{ product.name }} - ${{ product.price }}
+    <a href="#!/products/edit/{{ product.id }}">Edit</a>
+    <button ng-click="deleteProduct(product.id)">Delete</button>
+  </li>
+</ul>

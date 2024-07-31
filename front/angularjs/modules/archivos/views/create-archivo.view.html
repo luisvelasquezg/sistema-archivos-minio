@@ -3,4 +3,18 @@
 <section data-ng-controller="ArchivosController">
   <label>ARCHIVOS</label>
   <label>Crear Archivo</label>
+
+
+  <h1>{{ product.id ? 'Edit Product' : 'New Product' }}</h1>
+  <form ng-submit="saveProduct()">
+    <label>Nombre</label>
+    <label>Descripcion</label>
+    <label>Ubicacion</label>
+    <input type="text" ng-model="product.name" required>
+    <label>Price:</label>
+    <input type="number" ng-model="product.price" required>
+    <button type="submit">Save</button>
+    <a href="#!/products">Cancel</a>
+  </form>
+
 </section>

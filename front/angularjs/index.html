@@ -7,22 +7,32 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-resource.min.js"></script>
   <!-- <script src="app.js"></script> -->
-</head>
-
-<body>
 
   <script type="text/javascript" src="/modules/archivos/archivos.client.module.js"></script>
   <script type="text/javascript" src="/modules/archivos/controllers/archivos.client.controller.js"></script>
   <script type="text/javascript" src="/modules/archivos/services/archivos.client.service.js"></script>
   <script type="text/javascript" src="/modules/archivos/config/archivos.client.routes.js"></script>
   <script src="app.js"></script>
+</head>
 
-  <div ng-controller="MainController">
+<body>
+
+  <!-- <script type="text/javascript" src="/modules/archivos/archivos.client.module.js"></script>
+  <script type="text/javascript" src="/modules/archivos/controllers/archivos.client.controller.js"></script>
+  <script type="text/javascript" src="/modules/archivos/services/archivos.client.service.js"></script>
+  <script type="text/javascript" src="/modules/archivos/config/archivos.client.routes.js"></script>
+  <script src="app.js"></script> -->
+
+  <!-- <div ng-controller="MainController">
     <h1>API Consumer</h1>
     <ul>
       <li ng-repeat="archivo in archivos">{{ archivo.nombre }}</li>
     </ul>
-  </div>
+  </div> -->
+  <h1>Bienvenido</h1>
+  <a href="/#!/archivos">Archivos</a>
+  <a href="/">Home</a>
+  <div ng-view></div>
 </body>
 
 </html>

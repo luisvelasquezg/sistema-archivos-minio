@@ -33,7 +33,7 @@ const minioClient = new minio.Client({
   secretKey: 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'
 });
 
-const myBucketName = 'sistema-archivos-example';
+const myBucketName = 'sistema-archivos-example2';
 
 // Configurar multer para manejar la carga de archivos
 const upload = multer({ storage: multer.memoryStorage() });
@@ -111,34 +111,36 @@ app.get('/download/:filename', async (req, res) => {
 app.delete('/delete/:filename', async (req, res) => {
   const bucketName = myBucketName;
   const objectName = req.params.filename;
-  const maxRetries = 3;
-  let attempt = 0;
+  // const maxRetries = 3;
+  // let attempt = 0;
 
-  async function deleteObject() {
-    attempt++;
-    try {
-      await minioClient.removeObject(bucketName, objectName);
-      return res.status(200).json({ message: 'Archivo eliminado con éxito' });
-    } catch (err) {
-      if (attempt <= maxRetries) {
-        console.error(`Attempt ${attempt} failed: ${err.message}. Retrying...`);
-        setTimeout(deleteObject, Math.pow(2, attempt) * 1000); // Backoff exponencial
-      } else {
-        console.error('Max retries reached:', err);
-        return res.status(500).json({ message: 'Error al eliminar el archivo' });
-      }
-    }
-  }
-
-  deleteObject();
-
-  // try {
-  //   await minioClient.removeObject(bucketName, objectName);
-  //   res.status(200).json({ message: 'Archivo eliminado con éxito' });
-  // } catch (err) {
-  //   console.error(err);
-  //   res.status(500).json({ message: 'Error al eliminar el archivo' });
+  // async function deleteObject() {
+  //   attempt++;
+  //   try {
+  //     await minioClient.removeObject(bucketName, objectName);
+  //     return res.status(200).json({ message: 'Archivo eliminado con éxito' });
+  //   } catch (err) {
+  //     if (attempt < maxRetries) {
+  //       console.error(`Attempt ${attempt} failed: ${err.message}. Retrying...`);
+  //       setTimeout(deleteObject, Math.pow(2, attempt) * 1000); // Backoff exponencial
+  //     } else {
+  //       console.error('Max retries reached:', err);
+  //       return res.status(500).json({ message: 'Error al eliminar el archivo' });
+  //     }
+  //   }
   // }
+
+  // deleteObject();
+
+  // ==============================
+
+  try {
+    await minioClient.removeObject(bucketName, objectName);
+    res.status(200).json({ message: 'Archivo eliminado con éxito' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error al eliminar el archivo' });
+  }
 
 });
 
@@ -236,6 +238,7 @@ connectDB();
 apiRoutes(app);
 
 app.use(express.static('../front/angularjs'));
+// app.use(express.static('../front/angularjs-2'));
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

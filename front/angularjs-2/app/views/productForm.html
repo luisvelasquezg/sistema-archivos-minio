@@ -1,0 +1,9 @@
+<h1>{{ product.id ? 'Edit Product' : 'New Product' }}</h1>
+<form ng-submit="saveProduct()">
+  <label>Name:</label>
+  <input type="text" ng-model="product.name" required>
+  <label>Price:</label>
+  <input type="number" ng-model="product.price" required>
+  <button type="submit">Save</button>
+  <a href="#!/products">Cancel</a>
+</form>
