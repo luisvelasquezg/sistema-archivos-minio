@@ -24,6 +24,7 @@
         <th>Descripción</th>
         <th>Ubicación</th>
         <th>Fecha de Creación</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -32,10 +33,15 @@
         <td>{{ archivo.descripcion }}</td>
         <td>{{ archivo.ubicacion }}</td>
         <td>{{ archivo.fechaCreacion }}</td>
+        <td>
+          <a href="#!/archivos/{{ archivo._id }}">Ver</a>
+          <a href="#!/archivos/{{ archivo._id }}/edit">Editar</a>
+          <a href="#!/archivos/{{ archivo._id }}/delete">Eliminar</a>
+        </td>
       </tr>
     </tbody>
   </table>
-<!-- 
+  <!-- 
   <ul>
     <li ng-repeat="archivo in archivos">{{ archivo.nombre }}</li>
   </ul> -->

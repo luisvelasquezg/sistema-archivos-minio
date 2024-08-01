@@ -20,6 +20,13 @@ angular.module('archivos').controller('ArchivosController',
       ArchivoService.save($scope.archivo);
       $location.path('/archivos');
     };
+
+    $scope.findOne = function () {
+      $scope.archivo = ArchivoService.get({
+        // archivoId: $routeParams.archivoId
+        id: $routeParams.id
+      });
+    };
   })
 
 
