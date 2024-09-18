@@ -1,0 +1,1 @@
+npm install @angular/upgrade @angular/core @angular/common @angular/compiler @angular/platform-browser @angular/platform-browser-dynamic @angular/forms @angular/router angular@^1.7.0

@@ -1,0 +1,76 @@
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { AngularWebpackPlugin } = require('@ngtools/webpack');
+
+module.exports = {
+  mode: 'development',
+  entry: {
+    polyfills: './src/polyfills.ts',
+    main: './src/main.ts'
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'my-hybrid-app.bundle.js'
+  },
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        loader: '@ngtools/webpack'
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader'
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
+    }),
+    new AngularWebpackPlugin({
+      tsconfig: './tsconfig.json',
+      entryModule: './src/app/app.module'
+      // entryModule: './src/app/app.module#AppModule'
+    })
+  ],
+  resolve: {
+    alias: {
+      "@angular/upgrade/static": "@angular/upgrade/bundles/upgrade-static.umd.js"
+    }
+  },
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
+  devServer: {
+    static: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000
+  }
+};

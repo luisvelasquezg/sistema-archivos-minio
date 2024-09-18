@@ -3,9 +3,11 @@ import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+// @Injectable({
+//   providedIn: 'root'
+// })
+
+@Injectable()
 export class FileService {
   private apiUrl = 'http://localhost:3000';
   // private fileUploadedSource = new Subject<void>();

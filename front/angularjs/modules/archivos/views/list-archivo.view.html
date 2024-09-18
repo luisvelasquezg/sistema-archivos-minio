@@ -36,7 +36,8 @@
         <td>
           <a href="#!/archivos/{{ archivo._id }}">Ver</a>
           <a href="#!/archivos/{{ archivo._id }}/edit">Editar</a>
-          <a href="#!/archivos/{{ archivo._id }}/delete">Eliminar</a>
+          <button ng-click="delete(archivo._id)">Eliminar</button>
+        </td>
         </td>
       </tr>
     </tbody>

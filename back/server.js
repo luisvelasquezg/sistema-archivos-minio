@@ -33,7 +33,7 @@ const minioClient = new minio.Client({
   secretKey: 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'
 });
 
-const myBucketName = 'sistema-archivos-example2';
+const myBucketName = 'sistema-archivos-example';
 
 // Configurar multer para manejar la carga de archivos
 const upload = multer({ storage: multer.memoryStorage() });
@@ -56,7 +56,10 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   const objectName = req.file.originalname;
   const fileBuffer = req.file.buffer;
 
+  console.log('fileBuffer:', fileBuffer);
+
   try {
+    // await minioClient.putObject(bucketName, objectName, fileBuffer);
     await minioClient.putObject(bucketName, objectName, fileBuffer);
     // res.status(200).send('Archivo subido con éxito'); // Respuesta de texto plano
     res.status(200).json({ message: 'Archivo subido con éxito' }); // Respuesta de formato JSON
@@ -237,6 +240,18 @@ app.get('/view/:filename', async (req, res) => {
 connectDB();
 apiRoutes(app);
 
+
+// // Serve static files from the 'dist' directory
+// app.use(express.static(path.join(__dirname, 'dist')));
+
+// // Catch all other routes and return the index file
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'dist', 'bundle.js'));
+//   // res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+// });
+
+
+// app.use(express.static('./public'));
 app.use(express.static('../front/angularjs'));
 // app.use(express.static('../front/angularjs-2'));
 
